@@ -1,0 +1,12 @@
+body {
+  background-color: #37718e !important;
+  color: white !important;
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
+@media (max-width: 500px) {
+  body {
+    padding: 1rem;
+  }
+}

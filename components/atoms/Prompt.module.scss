@@ -1,0 +1,19 @@
+.main {
+  color: #37718e;
+
+  font-size: 5rem;
+  width: auto;
+
+  opacity: 0.02;
+
+  animation: prompt 10s linear infinite;
+}
+
+@keyframes prompt {
+  0% {
+    transform: translateX(-500px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
