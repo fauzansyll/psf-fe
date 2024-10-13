@@ -13,6 +13,7 @@ import {
 } from "react";
 import Form from "@/components/organisms/Form";
 import { useScrollBlock } from "@/lib/useScroll";
+import Prompt from "@/components/atoms/Prompt";
 
 interface StateProps {
   isBook: boolean;
@@ -47,10 +48,13 @@ export default function Home() {
 
   return (
     <AppContext.Provider value={{ isBook: state.isBook, setIsBook: setState }}>
-      <div className={`${style.main} py-2`}>
+      <div className={`${style.main} py-2 `}>
         <LandingPage />
       </div>
       {state.isBook && <Form />}
+      {/* <div className={`${style.prompt}`}>
+        <Prompt left="50" top="50" />
+      </div> */}
     </AppContext.Provider>
   );
 }

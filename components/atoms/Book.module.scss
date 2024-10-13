@@ -1,0 +1,15 @@
+.main {
+  .form {
+    width: 500px;
+    margin: 0;
+  }
+}
+
+@media (max-width: 500px) {
+  .main {
+    .form {
+      width: calc(100% - 4rem);
+      margin: 0 2rem;
+    }
+  }
+}

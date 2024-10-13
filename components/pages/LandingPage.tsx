@@ -14,7 +14,6 @@ const LandingPage = () => {
           <Hero />
         </Layout>
       </div>
-      <div className={`${style.prompt}`}>{/* <Prompt /> */}</div>
     </>
   );
 };

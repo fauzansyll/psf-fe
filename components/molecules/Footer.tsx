@@ -4,7 +4,7 @@ import { Circle } from "../atoms/Circle";
 
 const Footer = () => {
   return (
-    <div className="">
+    <div className="py-5">
       <div className="d-flex flex-column flex-lg-row w-75 justify-content-between">
         <div className="d-flex flex-column gap-5">
           <h4>Quick Link</h4>

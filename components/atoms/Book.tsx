@@ -8,14 +8,29 @@ import { dataBooking, dataKupon } from "@/lib/data";
 import Button from "./Button";
 import { useGlobalContext } from "@/app/page";
 import { useScrollBlock } from "@/lib/useScroll";
+import style from "./Book.module.scss";
+import { dataLapangan } from "@/lib/data";
+import Select from "./Select";
+
+interface FormProps {
+  nama: string;
+  email: string;
+  lapangan: string;
+  tanggal: string;
+  waktu: string;
+  total: number;
+  code: string;
+}
 
 const Book = () => {
-  const [blockScroll, allowScroll] = useScrollBlock();
-  const { isBook, setIsBook } = useGlobalContext();
+  const { setIsBook } = useGlobalContext();
   const [coupon, setCoupon] = useState("");
   const [data, setData] = useState(dataBooking[0]);
   const [originalTotal] = useState(dataBooking[0].total);
-  const [valid, setValid] = useState(false);
+  const [valid, setValid] = useState({
+    message: "",
+    color: "",
+  });
   const [total, setTotal] = useState(originalTotal);
   const rupiah = new Intl.NumberFormat().format(total);
 
@@ -61,6 +76,11 @@ const Book = () => {
   }
 
   const checkKupon = () => {
+    if (!coupon.trim()) {
+      setValid({ ...valid, message: "Kode kupon harus diisi" });
+      return;
+    }
+
     const kupon = dataKupon.find((kupon) =>
       isBookingValidForKupon(data, kupon)
     );
@@ -70,10 +90,10 @@ const Book = () => {
       const newTotal = originalTotal - originalTotal * discount;
       setTotal(newTotal);
       setData({ ...data, code: coupon });
-      setValid(true);
+      setValid({ message: "Code is valid", color: "success" });
     } else {
       setTotal(originalTotal);
-      setValid(false);
+      setValid({ message: "Code is invalid", color: "danger" });
       setData({ ...data, code: "" });
     }
   };
@@ -86,11 +106,19 @@ const Book = () => {
   };
 
   return (
-    <div className="position-absolute d-flex flex-column justify-content-center align-items-center w-100 top-0 start-0 end-0 bottom-0 ">
+    <div
+      className={`${style.main} position-absolute d-flex flex-column justify-content-center align-items-center w-100 top-0 start-0 end-0 bottom-0 `}
+    >
       <h1 onClick={toggleBooking}>Close</h1>
-      <form className="mx-auto rounded gap-2 d-flex flex-column bg-white text-dark p-5 w-50">
+      <form
+        className={`${style.form} rounded gap-2 d-flex flex-column bg-white text-dark p-5`}
+      >
+        {/* 
+        bootstrap tidak bisa lakukan mw-50 atau w-lg-50, jadi saya prefer tailwind untuk kedepannya jika ada development
+        */}
+
         <h4>Nama</h4>
-        {data.nama_pelamar}
+        {data.nama}
         <h4>Email</h4>
         {data.email}
         <h4>Lapangan</h4>
@@ -102,25 +130,29 @@ const Book = () => {
         <div className="">
           <h4>Total Harga :</h4>
           Rp. {rupiah}
-          {valid && <p className="text-success">Code is Valid !</p>}
+          {valid && <p className={`text-${valid.color}`}>{valid.message}</p>}
         </div>
-        <h5>Insert your coupon for discount</h5>
+        <h6>Insert coupon </h6>
         <div className="d-flex align-items-center mb-3 gap-2">
           <Input
             onChange={(e) => setCoupon(e.currentTarget.value)}
             type="text"
+            id="coupon"
+            value={coupon}
           />
           <Button onClick={checkKupon} type="button">
             Check
           </Button>
         </div>
+
+        <Button type="button" onClick={toggleBooking}>
+          Confirm Booking
+        </Button>
+
         {/* 
         Action confirm booking sementara dikarenakan belum ada API method post untuk lempar ke database, dan juga validasi jika waktu, lapangan sudah di ambil setelah validasi pertama
         (validasi pertama dari frontend dan jika memang ada user pada waktu yang sama telah membooking, dengan premis kedua user sudah dalam form konfirmasi booking maka, ada fungsi untuk mengecheck apakah lapangan masih tersedia atau tidak, setelah button confirm di click)
          */}
-        <Button type="submit" onClick={toggleBooking}>
-          Confirm Booking
-        </Button>
       </form>
     </div>
   );

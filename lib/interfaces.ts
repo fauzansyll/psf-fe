@@ -9,7 +9,7 @@ export type Kupon = {
 };
 
 export type Booking = {
-  nama_pelamar: string;
+  nama: string;
   email: string;
   team: string;
   lapangan: string;
@@ -18,3 +18,10 @@ export type Booking = {
   total: number;
   code: string;
 };
+
+export interface SelectProps {
+  name: string;
+  id: string;
+  data: string[];
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}

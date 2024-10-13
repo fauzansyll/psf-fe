@@ -3,10 +3,12 @@ import React from "react";
 interface InputProps {
   placeholder?: string;
   type: string;
+  id: string;
+  value: string | undefined;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input = ({ onChange, placeholder, type, ...props }: InputProps) => {
+const Input = ({ onChange, placeholder, type, id, value }: InputProps) => {
   return (
     <div className="input-group ">
       <input
@@ -14,8 +16,9 @@ const Input = ({ onChange, placeholder, type, ...props }: InputProps) => {
         className="form-control"
         placeholder={placeholder}
         aria-label={placeholder}
+        id={id}
+        value={value}
         aria-describedby="basic-addon1"
-        {...props}
         onChange={onChange}
       />
     </div>

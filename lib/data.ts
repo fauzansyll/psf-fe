@@ -59,7 +59,7 @@ export const dataKupon: Kupon[] = [
 
 export const dataBooking: Booking[] = [
   {
-    nama_pelamar: "Fauzan",
+    nama: "Fauzan",
     email: "fauzan@gmail.com",
     team: "Staff IT",
     lapangan: "Lapangan 1",
@@ -68,4 +68,11 @@ export const dataBooking: Booking[] = [
     total: 2000000,
     code: "",
   },
+];
+
+export const dataLapangan = [
+  "Lapangan 1",
+  "Lapangan 2",
+  "Lapangan 3",
+  "Lapangan 4",
 ];
