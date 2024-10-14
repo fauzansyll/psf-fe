@@ -3,14 +3,14 @@
 import React, { useEffect, useState } from "react";
 
 import { Booking, Kupon } from "@/lib/interfaces";
-import Input from "./Input";
+import Input from "../atoms/Input";
 import { dataBooking, dataKupon } from "@/lib/data";
-import Button from "./Button";
+import Button from "../atoms/Button";
 import { useGlobalContext } from "@/app/page";
 import { useScrollBlock } from "@/lib/useScroll";
 import style from "./Book.module.scss";
 import { dataLapangan } from "@/lib/data";
-import Select from "./Select";
+import Select from "../atoms/Select";
 
 interface FormProps {
   nama: string;
@@ -109,7 +109,9 @@ const Book = () => {
     <div
       className={`${style.main} position-absolute d-flex flex-column justify-content-center align-items-center w-100 top-0 start-0 end-0 bottom-0 `}
     >
-      <h1 onClick={toggleBooking}>Close</h1>
+      <h1 className={`${style.close}`} onClick={toggleBooking}>
+        Close
+      </h1>
       <form
         className={`${style.form} rounded gap-2 d-flex flex-column bg-white text-dark p-5`}
       >
@@ -140,12 +142,12 @@ const Book = () => {
             id="coupon"
             value={coupon}
           />
-          <Button onClick={checkKupon} type="button">
+          <Button color={"secondary"} onClick={checkKupon} type="button">
             Check
           </Button>
         </div>
 
-        <Button type="button" onClick={toggleBooking}>
+        <Button color={"secondary"} type="button" onClick={toggleBooking}>
           Confirm Booking
         </Button>
 

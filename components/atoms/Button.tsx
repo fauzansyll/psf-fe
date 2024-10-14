@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import { cva, VariantProps } from "class-variance-authority";
+import style from "./Button.module.scss";
 
 interface ButtonProps extends VariantProps<typeof buttonStyles> {
   children: ReactNode;
@@ -10,8 +11,8 @@ interface ButtonProps extends VariantProps<typeof buttonStyles> {
 const buttonStyles = cva("btn", {
   variants: {
     color: {
-      primary: "btn-primary",
-      secondary: "btn-secondary",
+      primary: style.primaryButton,
+      secondary: style.secondaryButton,
       success: "btn-success",
       danger: "btn-danger",
       warning: "btn-warning",
@@ -28,7 +29,9 @@ const Button = ({ children, type = "button", color, onClick }: ButtonProps) => {
     <button
       onClick={onClick}
       type={type}
-      className={`${buttonStyles({ color })}  `}
+      className={`${buttonStyles({
+        color,
+      })} d-flex justify-content-center align-items-center `}
     >
       {children}
     </button>

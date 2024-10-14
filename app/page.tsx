@@ -13,7 +13,6 @@ import {
 } from "react";
 import Form from "@/components/organisms/Form";
 import { useScrollBlock } from "@/lib/useScroll";
-import Prompt from "@/components/atoms/Prompt";
 
 interface StateProps {
   isBook: boolean;
@@ -38,6 +37,18 @@ export default function Home() {
   const [state, setState] = useState<StateProps>({ isBook: false });
   const [blockScroll, allowScroll] = useScrollBlock();
 
+  const [posisiBola, setPosisiBola] = useState({ top: 50, left: 50 });
+
+  const generateRandomPosition = () => {
+    const top = Math.random() * 100;
+    const left = Math.random() * 100;
+    setPosisiBola({ top, left });
+  };
+
+  useEffect(() => {
+    generateRandomPosition();
+  }, []);
+
   useEffect(() => {
     if (!state.isBook) {
       allowScroll();
@@ -52,9 +63,6 @@ export default function Home() {
         <LandingPage />
       </div>
       {state.isBook && <Form />}
-      {/* <div className={`${style.prompt}`}>
-        <Prompt left="50" top="50" />
-      </div> */}
     </AppContext.Provider>
   );
 }

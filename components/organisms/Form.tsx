@@ -1,6 +1,6 @@
 import React from "react";
 
-import Book from "../atoms/Book";
+import Book from "../molecules/Book";
 import BgPopUp from "../molecules/Toast";
 
 const Form = () => {

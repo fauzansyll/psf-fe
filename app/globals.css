@@ -4,3 +4,7 @@ body {
   overflow-x: hidden;
   /* white-space: nowrap; */
 }
+
+p {
+  margin: 0;
+}

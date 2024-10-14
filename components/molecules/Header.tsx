@@ -11,7 +11,7 @@ const Header = () => {
   };
 
   return (
-    <div className="w-100 position-absolute d-flex gap-5 justify-content-between align-items-center  p-3">
+    <div className="w-100  d-flex gap-5 justify-content-between align-items-center  p-3">
       <div>
         <Logo />
       </div>
@@ -32,7 +32,7 @@ const Header = () => {
 
       {isMenuOpen && (
         <div
-          className={`${style.dropdown} duration-300 position-fixed top-0 end-0 w-100 h-100 bg-black shadow-lg`}
+          className={`${style.dropdown}  position-fixed top-0 end-0 w-100 h-100  shadow-lg`}
         >
           <Navlink isMenuOpen={isMenuOpen} togglemenu={toggleMenu} />
         </div>

@@ -37,5 +37,15 @@
   padding: 10px;
   z-index: 1000;
   transition-duration: 1000;
-  background-color: white;
+  background-color: #37718e;
+}
+
+.link {
+  font-size: medium;
+}
+
+@media (max-width: 500px) {
+  .link {
+    font-size: 2rem;
+  }
 }
