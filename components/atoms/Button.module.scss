@@ -1,9 +1,19 @@
 .primaryButton {
-  background-color: white;
+  background-color: #ffff;
   color: #37718e;
+}
+
+.primaryButton:hover {
+  background-color: #ffffffcc;
+  color: #37718edb;
 }
 
 .secondaryButton {
   background-color: #37718e;
-  color: white;
+  color: #ffff;
+}
+
+.secondaryButton:hover {
+  background-color: #37718edb;
+  color: #ffffffcc;
 }

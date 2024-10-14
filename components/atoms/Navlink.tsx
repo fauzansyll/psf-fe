@@ -4,6 +4,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import style from "@/components/molecules/Header.module.scss";
 import Button from "./Button";
+import Logo from "./Logo";
 
 interface Navlink {
   togglemenu: () => void;
@@ -12,23 +13,30 @@ interface Navlink {
 
 const Navlink = ({ togglemenu, isMenuOpen }: Navlink) => {
   const [windowSize, setWindowSize] = useState({
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: 0,
+    height: 0,
   });
 
   useEffect(() => {
-    const handleResize = () => {
+    if (typeof window !== "undefined") {
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
       });
-    };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+      const handleResize = () => {
+        setWindowSize({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        });
+      };
+
+      window.addEventListener("resize", handleResize);
+
+      return () => window.removeEventListener("resize", handleResize);
+    }
   }, []);
 
-  console.log(windowSize);
   return (
     <div className="d-flex flex-column justify-content-lg-between h-100 flex-lg-row gap-5 align-items-center p-3">
       <div className="d-lg-none">
@@ -50,6 +58,12 @@ const Navlink = ({ togglemenu, isMenuOpen }: Navlink) => {
       >
         <span className={`${style.link}`}>Sign In</span>
       </Button>
+
+      {windowSize.width <= 500 ? (
+        <div className="position-absolute bottom-0 my-5 ">
+          <Logo />
+        </div>
+      ) : null}
     </div>
   );
 };

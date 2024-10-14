@@ -11,6 +11,7 @@ import { useScrollBlock } from "@/lib/useScroll";
 import style from "./Book.module.scss";
 import { dataLapangan } from "@/lib/data";
 import Select from "../atoms/Select";
+import { number } from "zod";
 
 interface FormProps {
   nama: string;
@@ -27,6 +28,8 @@ const Book = () => {
   const [coupon, setCoupon] = useState("");
   const [data, setData] = useState(dataBooking[0]);
   const [originalTotal] = useState(dataBooking[0].total);
+
+  const [discount, setDiscount] = useState(0);
   const [valid, setValid] = useState({
     message: "",
     color: "",
@@ -87,6 +90,7 @@ const Book = () => {
 
     if (kupon) {
       const discount = parseFloat(kupon.potongan) / 100;
+      setDiscount(discount * 100);
       const newTotal = originalTotal - originalTotal * discount;
       setTotal(newTotal);
       setData({ ...data, code: coupon });
@@ -132,7 +136,11 @@ const Book = () => {
         <div className="">
           <h4>Total Harga :</h4>
           Rp. {rupiah}
-          {valid && <p className={`text-${valid.color}`}>{valid.message}</p>}
+          {valid && (
+            <p className={`text-${valid.color}`}>
+              {valid.message} {discount}% Off !
+            </p>
+          )}
         </div>
         <h6>Insert coupon </h6>
         <div className="d-flex align-items-center mb-3 gap-2">
