@@ -136,11 +136,14 @@ const Book = () => {
         <div className="">
           <h4>Total Harga :</h4>
           Rp. {rupiah}
-          {valid && (
-            <p className={`text-${valid.color}`}>
-              {valid.message} {discount}% Off !
+          {valid ? (
+            <p className={`text-${valid.color} d-flex gap-2`}>
+              {valid.message}{" "}
+              {discount === 0 ? null : (
+                <p className={`text-${valid.color}`}>{discount}% Off !</p>
+              )}
             </p>
-          )}
+          ) : null}
         </div>
         <h6>Insert coupon </h6>
         <div className="d-flex align-items-center mb-3 gap-2">

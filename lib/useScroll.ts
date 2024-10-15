@@ -6,7 +6,7 @@ export const useScrollBlock = (): [() => void, () => void] => {
   const scrollBlocked = useRef(false);
 
   if (!isBrowser) {
-    return [() => {}, () => {}]; // Return no-op functions on server side
+    return [() => {}, () => {}];
   }
 
   const html = document.documentElement;
