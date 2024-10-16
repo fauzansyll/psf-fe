@@ -5,7 +5,7 @@ import style from "./Button.module.scss";
 interface ButtonProps extends VariantProps<typeof buttonStyles> {
   children: ReactNode;
   type: "button" | "reset" | "submit";
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const buttonStyles = cva("btn", {

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-
+import { useForm, SubmitHandler } from "react-hook-form";
 import { Booking, Kupon } from "@/lib/interfaces";
 import Input from "../atoms/Input";
 import { dataBooking, dataKupon } from "@/lib/data";
@@ -24,6 +24,36 @@ interface FormProps {
 }
 
 const Book = () => {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormProps>();
+
+  const [theData, setTheData] = useState<FormProps>({
+    nama: "",
+    email: "",
+    lapangan: "",
+    tanggal: "",
+    waktu: "",
+    total: 2000000,
+    code: "",
+  });
+
+  const onSubmit: SubmitHandler<FormProps> = (data) =>
+    setTheData({
+      ...theData,
+      nama: data.nama,
+      email: data.email,
+      lapangan: data.lapangan,
+      tanggal: data.tanggal,
+      waktu: data.waktu,
+      code: data.code,
+    });
+
+  console.log("The Data", theData);
+
   const { setIsBook } = useGlobalContext();
   const [coupon, setCoupon] = useState("");
   const [data, setData] = useState(dataBooking[0]);
@@ -93,12 +123,12 @@ const Book = () => {
       setDiscount(discount * 100);
       const newTotal = originalTotal - originalTotal * discount;
       setTotal(newTotal);
-      setData({ ...data, code: coupon });
+      setTheData({ ...theData, code: coupon, total: newTotal });
       setValid({ message: "Code is valid", color: "success" });
     } else {
       setTotal(originalTotal);
       setValid({ message: "Code is invalid", color: "danger" });
-      setData({ ...data, code: "" });
+      setTheData({ ...theData, code: "" });
     }
   };
 
@@ -118,12 +148,50 @@ const Book = () => {
       </h1>
       <form
         className={`${style.form} rounded gap-2 d-flex flex-column bg-white text-dark p-5`}
+        onSubmit={handleSubmit(onSubmit)}
       >
-        {/* 
-        bootstrap tidak bisa lakukan mw-50 atau w-lg-50, jadi saya prefer tailwind untuk kedepannya jika ada development
-        */}
+        <label htmlFor="nama">Nama</label>
+        <Input
+          errors={errors}
+          id="nama"
+          name="nama"
+          type="text"
+          register={register}
+        />
+        <label htmlFor="email">Email</label>
+        <Input
+          errors={errors}
+          id="email"
+          name="email"
+          type="text"
+          register={register}
+        />
+        <label htmlFor="lapangan">Lapangan</label>
+        <Input
+          errors={errors}
+          id="lapangan"
+          name="lapangan"
+          type="text"
+          register={register}
+        />
 
-        <h4>Nama</h4>
+        <label htmlFor="lapangan">Tanggal</label>
+        <Input
+          errors={errors}
+          id="tanggal"
+          name="tanggal"
+          type="text"
+          register={register}
+        />
+        <label htmlFor="waktu">Waktu</label>
+        <Input
+          errors={errors}
+          id="waktu"
+          name="waktu"
+          type="text"
+          register={register}
+        />
+        {/* <h4>Nama</h4>
         {data.nama}
         <h4>Email</h4>
         {data.email}
@@ -132,33 +200,33 @@ const Book = () => {
         <h4>Tanggal</h4>
         {data.tanggal}
         <h4>Waktu</h4>
-        {data.jam}
-        <div className="">
+        {data.jam} */}
+
+        <span className="">
           <h4>Total Harga :</h4>
           Rp. {rupiah}
           {valid ? (
             <p className={`text-${valid.color} d-flex gap-2`}>
-              {valid.message}{" "}
-              {discount === 0 ? null : (
-                <p className={`text-${valid.color}`}>{discount}% Off !</p>
-              )}
+              {valid.message} {discount === 0 ? null : `${discount}% Off !`}
             </p>
           ) : null}
-        </div>
+        </span>
         <h6>Insert coupon </h6>
-        <div className="d-flex align-items-center mb-3 gap-2">
+        <span className="d-flex align-items-center mb-3 gap-2">
           <Input
             onChange={(e) => setCoupon(e.currentTarget.value)}
             type="text"
+            name="coupon"
+            errors={errors}
             id="coupon"
-            value={coupon}
+            register={register}
           />
           <Button color={"secondary"} onClick={checkKupon} type="button">
             Check
           </Button>
-        </div>
+        </span>
 
-        <Button color={"secondary"} type="button" onClick={toggleBooking}>
+        <Button color={"secondary"} type="submit">
           Confirm Booking
         </Button>
 
