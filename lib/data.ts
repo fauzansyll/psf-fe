@@ -71,8 +71,20 @@ export const dataBooking: Booking[] = [
 ];
 
 export const dataLapangan = [
-  "Lapangan 1",
-  "Lapangan 2",
-  "Lapangan 3",
-  "Lapangan 4",
+  {
+    lapangan: "Lapangan 1",
+    price: 2000000,
+  },
+  {
+    lapangan: "Lapangan 2",
+    price: 2500000,
+  },
+  {
+    lapangan: "Lapangan 3",
+    price: 1500000,
+  },
+  {
+    lapangan: "Lapangan 4",
+    price: 1800000,
+  },
 ];

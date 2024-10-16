@@ -7,6 +7,7 @@ interface InputProps {
   id: string;
   name: string;
   errors: any;
+  required: boolean;
   register: any;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
@@ -19,6 +20,7 @@ const Input = ({
   id,
   errors,
   register,
+  required,
 }: InputProps) => {
   console.log("Error :", errors);
   return (
@@ -26,7 +28,7 @@ const Input = ({
       <input
         type={type}
         name={name}
-        {...register(name, { required: true })}
+        {...register(name, { required })}
         className="form-control w-100"
         placeholder={placeholder}
         aria-label={placeholder}

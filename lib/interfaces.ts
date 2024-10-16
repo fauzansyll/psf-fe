@@ -22,6 +22,7 @@ export type Booking = {
 export interface SelectProps {
   name: string;
   id: string;
+  register: any;
   data: string[];
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }

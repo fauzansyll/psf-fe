@@ -1,25 +1,23 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Booking, Kupon } from "@/lib/interfaces";
 import Input from "../atoms/Input";
-import { dataBooking, dataKupon } from "@/lib/data";
+import { dataBooking, dataKupon, dataLapangan } from "@/lib/data";
 import Button from "../atoms/Button";
 import { useGlobalContext } from "@/app/page";
-import { useScrollBlock } from "@/lib/useScroll";
 import style from "./Book.module.scss";
-import { dataLapangan } from "@/lib/data";
 import Select from "../atoms/Select";
-import { number } from "zod";
 
 interface FormProps {
   nama: string;
   email: string;
   lapangan: string;
   tanggal: string;
-  waktu: string;
-  total: number;
+  start: string;
+  end: string;
+  total: number | undefined;
   code: string;
 }
 
@@ -36,36 +34,35 @@ const Book = () => {
     email: "",
     lapangan: "",
     tanggal: "",
-    waktu: "",
+    start: "",
+    end: "",
     total: 2000000,
     code: "",
   });
 
-  const onSubmit: SubmitHandler<FormProps> = (data) =>
-    setTheData({
-      ...theData,
-      nama: data.nama,
-      email: data.email,
-      lapangan: data.lapangan,
-      tanggal: data.tanggal,
-      waktu: data.waktu,
-      code: data.code,
-    });
+  // const onSubmit: SubmitHandler<FormProps> = (data) =>
+  //   setTheData({
+  //     ...theData,
+  //     nama: data.nama,
+  //     email: data.email,
+  //     lapangan: data.lapangan,
+  //     tanggal: data.tanggal,
+  //     waktu: data.waktu,
+  //     code: data.code,
+  //     total: harga,
+  //   });
 
   console.log("The Data", theData);
 
   const { setIsBook } = useGlobalContext();
   const [coupon, setCoupon] = useState("");
   const [data, setData] = useState(dataBooking[0]);
-  const [originalTotal] = useState(dataBooking[0].total);
 
   const [discount, setDiscount] = useState(0);
   const [valid, setValid] = useState({
     message: "",
     color: "",
   });
-  const [total, setTotal] = useState(originalTotal);
-  const rupiah = new Intl.NumberFormat().format(total);
 
   function convertIndonesianDate(dateString: string): Date | null {
     const monthMapping: { [key: string]: string } = {
@@ -89,8 +86,8 @@ const Book = () => {
     return new Date(`${hari} ${bulan} ${tahun}`);
   }
 
-  function isBookingValidForKupon(booking: Booking, kupon: Kupon): boolean {
-    const bookingDate = convertIndonesianDate(booking.tanggal);
+  function isBookingValidForKupon(booking: FormProps, kupon: Kupon): boolean {
+    const bookingDate = new Date(booking.tanggal);
     if (!bookingDate) return false;
 
     const kuponStart = new Date(kupon.start);
@@ -101,11 +98,36 @@ const Book = () => {
     const isLapanganMatching =
       booking.lapangan.toLowerCase() === kupon.lapangan.toLowerCase();
 
-    const bookingTime = booking.jam.split(" - ")[0];
+    const startBookingTime = booking.start;
+    const endBookingTime = booking.end;
     const kuponTime = kupon.jam.split("-")[0];
-    const isTimeMatching = bookingTime === kuponTime;
+    const isTimeMatching = startBookingTime === kuponTime;
 
-    return isDateInRange && isLapanganMatching && isTimeMatching && isCodeValid;
+    if (!isTimeMatching) {
+      console.error("Time is not matching");
+      console.log("Start Time", startBookingTime);
+      console.log("Kupon Time", kuponTime);
+      console.log("End  Time", endBookingTime);
+      if (!isDateInRange) {
+        console.error("Date not in Range");
+        console.log("Booking Date", bookingDate);
+        console.log("Kupon Start", kuponStart);
+        console.log("Kupon End", kuponEnd);
+        if (!isLapanganMatching) {
+          console.error("Lapangan is not matching");
+          console.log("Lapangan Booking", booking.lapangan);
+          console.log("Kupon Lapangan", kupon.lapangan);
+          if (!isCodeValid) {
+            console.error("Code is not matching");
+            console.log("Code Kupon", kupon.code);
+            console.log("User Coupon", coupon);
+          }
+        }
+      }
+      return false;
+    }
+
+    return true;
   }
 
   const checkKupon = () => {
@@ -115,18 +137,19 @@ const Book = () => {
     }
 
     const kupon = dataKupon.find((kupon) =>
-      isBookingValidForKupon(data, kupon)
+      isBookingValidForKupon(theData, kupon)
     );
 
     if (kupon) {
       const discount = parseFloat(kupon.potongan) / 100;
+      console.log("kupon", kupon);
       setDiscount(discount * 100);
       const newTotal = originalTotal - originalTotal * discount;
-      setTotal(newTotal);
+      setPrice(newTotal);
       setTheData({ ...theData, code: coupon, total: newTotal });
       setValid({ message: "Code is valid", color: "success" });
     } else {
-      setTotal(originalTotal);
+      setPrice(originalTotal);
       setValid({ message: "Code is invalid", color: "danger" });
       setTheData({ ...theData, code: "" });
     }
@@ -139,6 +162,27 @@ const Book = () => {
     }));
   };
 
+  const initialPrice = new Intl.NumberFormat().format(dataLapangan[0].price);
+
+  const [selectedLapangan, setSelectedLapangan] = useState(dataLapangan[0]);
+  const [price, setPrice] = useState<string | number>(initialPrice);
+  const watchLapangan = watch("lapangan");
+  const [originalTotal] = useState<any>(initialPrice);
+
+  useEffect(() => {
+    const lapangan = dataLapangan.find((l) => l.lapangan === watchLapangan);
+    if (lapangan) {
+      setSelectedLapangan(lapangan);
+      const finalPrice = new Intl.NumberFormat().format(lapangan.price);
+      setPrice(finalPrice);
+    }
+  }, [watchLapangan]);
+
+  const onsubmit: SubmitHandler<FormProps> = (data) => {
+    setTheData(data);
+    console.log(theData);
+  };
+
   return (
     <div
       className={`${style.main} position-absolute d-flex flex-column justify-content-center align-items-center w-100 top-0 start-0 end-0 bottom-0 `}
@@ -148,13 +192,14 @@ const Book = () => {
       </h1>
       <form
         className={`${style.form} rounded gap-2 d-flex flex-column bg-white text-dark p-5`}
-        onSubmit={handleSubmit(onSubmit)}
+        onSubmit={handleSubmit(onsubmit)}
       >
         <label htmlFor="nama">Nama</label>
         <Input
           errors={errors}
           id="nama"
           name="nama"
+          required={true}
           type="text"
           register={register}
         />
@@ -163,34 +208,51 @@ const Book = () => {
           errors={errors}
           id="email"
           name="email"
+          required={true}
           type="text"
           register={register}
         />
         <label htmlFor="lapangan">Lapangan</label>
-        <Input
-          errors={errors}
-          id="lapangan"
+        <Select
           name="lapangan"
-          type="text"
+          id="lapangan"
+          data={dataLapangan.map((item) => item.lapangan)}
           register={register}
         />
-
         <label htmlFor="lapangan">Tanggal</label>
         <Input
           errors={errors}
           id="tanggal"
+          required={true}
           name="tanggal"
-          type="text"
+          type="date"
           register={register}
         />
         <label htmlFor="waktu">Waktu</label>
-        <Input
-          errors={errors}
-          id="waktu"
-          name="waktu"
-          type="text"
-          register={register}
-        />
+        <div className="d-flex gap-2">
+          <div className="w-100">
+            <span>Start</span>
+            <Input
+              errors={errors}
+              id="start"
+              required={true}
+              name="start"
+              type="time"
+              register={register}
+            />
+          </div>
+          <div className="w-100">
+            <span>End</span>
+            <Input
+              errors={errors}
+              id="end"
+              required={true}
+              name="end"
+              type="time"
+              register={register}
+            />
+          </div>
+        </div>
         {/* <h4>Nama</h4>
         {data.nama}
         <h4>Email</h4>
@@ -204,7 +266,8 @@ const Book = () => {
 
         <span className="">
           <h4>Total Harga :</h4>
-          Rp. {rupiah}
+          Rp.
+          {price}
           {valid ? (
             <p className={`text-${valid.color} d-flex gap-2`}>
               {valid.message} {discount === 0 ? null : `${discount}% Off !`}
@@ -218,10 +281,17 @@ const Book = () => {
             type="text"
             name="coupon"
             errors={errors}
+            required={false}
             id="coupon"
             register={register}
           />
-          <Button color={"secondary"} onClick={checkKupon} type="button">
+          <Button
+            color={"secondary"}
+            onClick={() => {
+              checkKupon(), onsubmit;
+            }}
+            type="button"
+          >
             Check
           </Button>
         </span>
