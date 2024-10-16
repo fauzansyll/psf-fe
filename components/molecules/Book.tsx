@@ -140,7 +140,7 @@ const Book = () => {
             <p className={`text-${valid.color} d-flex gap-2`}>
               {valid.message}{" "}
               {discount === 0 ? null : (
-                <p className={`text-${valid.color}`}>{discount}% Off !</p>
+                <span className={`text-${valid.color}`}>{discount}% Off !</span>
               )}
             </p>
           ) : null}
