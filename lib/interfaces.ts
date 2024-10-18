@@ -19,6 +19,23 @@ export type Booking = {
   code: string;
 };
 
+export interface FieldsProps {
+  nama: string;
+  image: string;
+  idx: number | string;
+  status: boolean;
+  cabang?: string;
+}
+
+export interface LapanganProps {
+  cabang: string;
+  fields: FieldsProps[];
+}
+
+export interface DataLapangan {
+  data: LapanganProps[];
+}
+
 export interface SelectProps {
   name: string;
   id: string;

@@ -7,11 +7,7 @@ import Input from "../atoms/Input";
 import { dataBooking, dataKupon } from "@/lib/data";
 import Button from "../atoms/Button";
 import { useGlobalContext } from "@/app/page";
-import { useScrollBlock } from "@/lib/useScroll";
 import style from "./Book.module.scss";
-import { dataLapangan } from "@/lib/data";
-import Select from "../atoms/Select";
-import { number } from "zod";
 
 interface FormProps {
   nama: string;
@@ -28,7 +24,6 @@ const Book = () => {
   const [coupon, setCoupon] = useState("");
   const [data, setData] = useState(dataBooking[0]);
   const [originalTotal] = useState(dataBooking[0].total);
-
   const [discount, setDiscount] = useState(0);
   const [valid, setValid] = useState({
     message: "",

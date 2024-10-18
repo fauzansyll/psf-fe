@@ -1,4 +1,4 @@
-import { Booking, Kupon } from "./interfaces";
+import { Booking, Kupon, LapanganProps } from "./interfaces";
 
 export const dataKupon: Kupon[] = [
   {
@@ -75,4 +75,65 @@ export const dataLapangan = [
   "Lapangan 2",
   "Lapangan 3",
   "Lapangan 4",
+];
+
+export const Lapangan: LapanganProps[] = [
+  {
+    cabang: "Siliwangi",
+    fields: [
+      {
+        idx: 1,
+        nama: "Lapangan 1",
+        image: "/FOOTBALFIELD.jpg",
+        status: false,
+      },
+      {
+        idx: 2,
+        nama: "Lapangan 2",
+        image: "/FOOTBALFIELD.jpg",
+        status: false,
+      },
+      {
+        idx: 3,
+        nama: "Lapangan 3",
+        image: "/FOOTBALFIELD.jpg",
+        status: true,
+      },
+      {
+        idx: 4,
+        nama: "Lapangan 4",
+        image: "/FOOTBALFIELD.jpg",
+        status: true,
+      },
+    ],
+  },
+  {
+    cabang: "Jakarta",
+    fields: [
+      {
+        idx: 1,
+        nama: "Lapangan 1",
+        image: "/FOOTBALFIELD.jpg",
+        status: false,
+      },
+      {
+        idx: 2,
+        nama: "Lapangan 2",
+        image: "/FOOTBALFIELD.jpg",
+        status: false,
+      },
+      {
+        idx: 3,
+        nama: "Lapangan 3",
+        image: "/FOOTBALFIELD.jpg",
+        status: true,
+      },
+      {
+        idx: 4,
+        nama: "Lapangan 4",
+        image: "/FOOTBALFIELD.jpg",
+        status: false,
+      },
+    ],
+  },
 ];
